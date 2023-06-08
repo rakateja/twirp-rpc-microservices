@@ -1,0 +1,93 @@
+syntax = "proto3";
+
+package twirp.example.card;
+option go_package = "proto/rpcproto";
+
+import "google/protobuf/timestamp.proto";
+
+service BoardService {
+    rpc CreateBoard(BoardCreateInput) returns (Board);
+    rpc UpdateBoard(BoardUpdateInput) returns (Board);
+    rpc AddMember(AddMemberInput) returns (Board);
+    rpc AddLabel(AddLabelInput) returns (Board);
+    rpc GetByID(GetByIDInput) returns (Board);
+    rpc GetPage(GetPageInput) returns (BoardPage);
+}
+
+message BoardCreateInput {
+    string title = 1;
+    repeated AddMemberInput members = 2;
+    repeated AddLabelInput labels = 3;
+    repeated AddListInput lists = 4;
+}
+
+message BoardUpdateInput {
+    string id = 1;
+    string title = 2;
+}
+
+message GetByIDInput {
+    string id = 1;
+}
+
+message AddMemberInput {
+    string user_id = 1;
+}
+
+message AddLabelInput {
+    string name = 1;
+    string color = 2;
+}
+
+message AddListInput {
+    string name = 1;
+    int32 position = 2;
+}
+
+message GetPageInput {
+    int32 page = 1;
+    int32 limit = 2;
+}
+
+message BoardPage {
+    repeated Board items = 1;
+    int32 total = 2;
+}
+
+message Board {
+    string id = 1;
+    string code = 2;
+    string title = 3;
+    repeated BoardMember members = 4;
+    repeated BoardList lists = 5;
+    repeated BoardLabel labels = 6;
+    google.protobuf.Timestamp created_at = 7;
+    google.protobuf.Timestamp updated_at = 8;
+}
+
+message BoardMember {
+    string id = 1;
+    string board_id = 2;
+    string user_id = 3;
+    google.protobuf.Timestamp created_at = 4;
+}
+
+message BoardList {
+    string id = 1;
+    string board_id = 2;
+    string public_id = 3;
+    string title = 4;
+    int32 position = 5;
+    google.protobuf.Timestamp created_at = 6;
+    google.protobuf.Timestamp updated_at = 7;
+}
+
+message BoardLabel {
+    string id = 1;
+    string board_id = 2;
+    string slug = 3;
+    string title = 4;
+    string color = 5;
+    google.protobuf.Timestamp created_at = 6;
+    google.protobuf.Timestamp updated_at = 7;
+}

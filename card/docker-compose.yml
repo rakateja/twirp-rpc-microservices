@@ -1,0 +1,16 @@
+version: "3.5"
+services:
+  mysql:
+    container_name: milo-mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: root-is-not-used
+      MYSQL_DATABASE: milo
+    image: mysql:${MYSQL_VERSION}
+    networks:
+      - milo-network
+    ports:
+      - 3307:3306
+networks:
+  milo-network:
+    driver: bridge
+    name: milo-network
