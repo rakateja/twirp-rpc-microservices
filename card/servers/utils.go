@@ -73,12 +73,15 @@ func ToBoardPb(entity board.Board) *pb.Board {
 		Members:   ToBoardMembersPb(entity.Members),
 		Lists:     ToBoardListsPb(entity.Lists),
 		Labels:    ToBoardLabelsPb(entity.Labels),
-		CreatedAt: ToTimestampPb(entity.CreatedAt),
-		UpdatedAt: ToTimestampPb(entity.UpdatedAt),
+		CreatedAt: ToTimestampPb(&entity.CreatedAt),
+		UpdatedAt: ToTimestampPb(&entity.UpdatedAt),
 	}
 }
 
-func ToTimestampPb(ts time.Time) *timestampPb.Timestamp {
+func ToTimestampPb(ts *time.Time) *timestampPb.Timestamp {
+	if ts == nil {
+		return nil
+	}
 	return &timestampPb.Timestamp{
 		Seconds: ts.Unix(),
 		Nanos:   int32(ts.Nanosecond()),
@@ -92,7 +95,7 @@ func ToBoardMembersPb(ls []board.BoardMember) []*pb.BoardMember {
 			Id:        entity.ID,
 			BoardId:   entity.BoardID,
 			UserId:    entity.UserID,
-			CreatedAt: ToTimestampPb(entity.CreatedAt),
+			CreatedAt: ToTimestampPb(&entity.CreatedAt),
 		})
 	}
 	return res
@@ -107,8 +110,8 @@ func ToBoardListsPb(ls []board.BoardList) []*pb.BoardList {
 			PublicId:  entity.PublicID,
 			Title:     entity.Title,
 			Position:  int32(entity.Position),
-			CreatedAt: ToTimestampPb(entity.CreatedAt),
-			UpdatedAt: ToTimestampPb(entity.UpdatedAt),
+			CreatedAt: ToTimestampPb(&entity.CreatedAt),
+			UpdatedAt: ToTimestampPb(&entity.UpdatedAt),
 		})
 	}
 	return res
@@ -123,8 +126,8 @@ func ToBoardLabelsPb(ls []board.Label) []*pb.BoardLabel {
 			Slug:      entity.Slug,
 			Title:     entity.Title,
 			Color:     entity.Color,
-			CreatedAt: ToTimestampPb(entity.CreatedAt),
-			UpdatedAt: ToTimestampPb(entity.CreatedAt),
+			CreatedAt: ToTimestampPb(&entity.CreatedAt),
+			UpdatedAt: ToTimestampPb(&entity.CreatedAt),
 		})
 	}
 	return res

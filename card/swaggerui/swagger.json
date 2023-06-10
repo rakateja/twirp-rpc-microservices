@@ -171,6 +171,162 @@
           }
         }
       }
+    },
+    "/twirp/twirp.example.card.CardService/Create": {
+      "post": {
+        "tags": [
+          "CardService"
+        ],
+        "operationId": "Create",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/twirp.example.card_CardInput"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/twirp.example.card_Card"
+            }
+          }
+        }
+      }
+    },
+    "/twirp/twirp.example.card.CardService/GetAll": {
+      "post": {
+        "tags": [
+          "CardService"
+        ],
+        "operationId": "GetAll",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/twirp.example.card_CardFilter"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/twirp.example.card_CardList"
+            }
+          }
+        }
+      }
+    },
+    "/twirp/twirp.example.card.CardService/GetByID": {
+      "post": {
+        "tags": [
+          "CardService"
+        ],
+        "operationId": "GetByID",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/twirp.example.card_GetByIDInput"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/twirp.example.card_Card"
+            }
+          }
+        }
+      }
+    },
+    "/twirp/twirp.example.card.CardService/GetPage": {
+      "post": {
+        "tags": [
+          "CardService"
+        ],
+        "operationId": "GetPage",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/twirp.example.card_GetPageInput"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/twirp.example.card_CardPage"
+            }
+          }
+        }
+      }
+    },
+    "/twirp/twirp.example.card.CardService/MoveList": {
+      "post": {
+        "tags": [
+          "CardService"
+        ],
+        "operationId": "MoveList",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/twirp.example.card_CardMoveListInput"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/twirp.example.card_Card"
+            }
+          }
+        }
+      }
+    },
+    "/twirp/twirp.example.card.CardService/Update": {
+      "post": {
+        "tags": [
+          "CardService"
+        ],
+        "operationId": "Update",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/twirp.example.card_CardUpdateInput"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/twirp.example.card_Card"
+            }
+          }
+        }
+      }
     }
   },
   "definitions": {
@@ -379,6 +535,233 @@
         },
         "title": {
           "type": "string"
+        }
+      }
+    },
+    "twirp.example.card_Card": {
+      "description": "Fields: id, list_id, public_id, title, description, due_date_from, due_date_until, due_date_completed_at, members, attachments, labels, created_at, updated_at, deleted_at",
+      "type": "object",
+      "properties": {
+        "attachments": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/twirp.example.card_CardAttachment"
+          }
+        },
+        "created_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "deleted_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "description": {
+          "type": "string"
+        },
+        "due_date_completed_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "due_date_from": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "due_date_until": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "id": {
+          "type": "string"
+        },
+        "labels": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/twirp.example.card_CardLabel"
+          }
+        },
+        "list_id": {
+          "type": "string"
+        },
+        "members": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/twirp.example.card_CardMember"
+          }
+        },
+        "public_id": {
+          "type": "string"
+        },
+        "title": {
+          "type": "string"
+        },
+        "updated_at": {
+          "type": "string",
+          "format": "date-time"
+        }
+      }
+    },
+    "twirp.example.card_CardAttachment": {
+      "description": "Fields: id, card_id, link_name, file_type, file_url, created_at, updated_at",
+      "type": "object",
+      "properties": {
+        "card_id": {
+          "type": "string"
+        },
+        "created_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "file_type": {
+          "type": "string"
+        },
+        "file_url": {
+          "type": "string"
+        },
+        "id": {
+          "type": "string"
+        },
+        "link_name": {
+          "type": "string"
+        },
+        "updated_at": {
+          "type": "string",
+          "format": "date-time"
+        }
+      }
+    },
+    "twirp.example.card_CardFilter": {
+      "description": "Fields: ids",
+      "type": "object",
+      "properties": {
+        "ids": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "twirp.example.card_CardInput": {
+      "description": "Fields: list_id, board_id, title, description, due_date_from, due_date_until, due_date_is_completed, members",
+      "type": "object",
+      "properties": {
+        "board_id": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "due_date_from": {
+          "type": "string"
+        },
+        "due_date_is_completed": {
+          "type": "boolean"
+        },
+        "due_date_until": {
+          "type": "string"
+        },
+        "list_id": {
+          "type": "string"
+        },
+        "members": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/twirp.example.card_AddMemberInput"
+          }
+        },
+        "title": {
+          "type": "string"
+        }
+      }
+    },
+    "twirp.example.card_CardLabel": {
+      "description": "Fields: id, card_id, label_id, created_at",
+      "type": "object",
+      "properties": {
+        "card_id": {
+          "type": "string"
+        },
+        "created_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "id": {
+          "type": "string"
+        },
+        "label_id": {
+          "type": "string"
+        }
+      }
+    },
+    "twirp.example.card_CardList": {
+      "description": "Fields: cards",
+      "type": "object",
+      "properties": {
+        "cards": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/twirp.example.card_Card"
+          }
+        }
+      }
+    },
+    "twirp.example.card_CardMember": {
+      "description": "Fields: id, card_id, user_id, created_at",
+      "type": "object",
+      "properties": {
+        "card_id": {
+          "type": "string"
+        },
+        "created_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "id": {
+          "type": "string"
+        },
+        "user_id": {
+          "type": "string"
+        }
+      }
+    },
+    "twirp.example.card_CardMoveListInput": {
+      "description": "Fields: cardID, listID",
+      "type": "object",
+      "properties": {
+        "cardID": {
+          "type": "string"
+        },
+        "listID": {
+          "type": "string"
+        }
+      }
+    },
+    "twirp.example.card_CardPage": {
+      "description": "Fields: items, total",
+      "type": "object",
+      "properties": {
+        "items": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/twirp.example.card_Card"
+          }
+        },
+        "total": {
+          "type": "integer",
+          "format": "int32"
+        }
+      }
+    },
+    "twirp.example.card_CardUpdateInput": {
+      "description": "Fields: id, input",
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "input": {
+          "$ref": "#/definitions/twirp.example.card_CardInput"
         }
       }
     },

@@ -14,6 +14,15 @@ service BoardService {
     rpc GetPage(GetPageInput) returns (BoardPage);
 }
 
+service CardService {
+    rpc Create(CardInput) returns (Card);
+    rpc Update(CardUpdateInput) returns (Card);
+    rpc MoveList(CardMoveListInput) returns (Card);
+    rpc GetByID(GetByIDInput) returns (Card);
+    rpc GetPage(GetPageInput) returns (CardPage);
+    rpc GetAll(CardFilter) returns (CardList);
+}
+
 message BoardCreateInput {
     string title = 1;
     repeated AddMemberInput members = 2;
@@ -90,4 +99,79 @@ message BoardLabel {
     string color = 5;
     google.protobuf.Timestamp created_at = 6;
     google.protobuf.Timestamp updated_at = 7;
+}
+
+message CardFilter {
+    repeated string ids = 1;
+}
+
+message CardMoveListInput {
+    string cardID = 1;
+    string listID = 2;
+}
+
+message CardUpdateInput {
+    string id = 1;
+    CardInput input = 2;
+}
+
+message CardInput {
+    string list_id = 1;
+    string board_id = 2;
+    string title = 3;
+    string description = 4;
+    string due_date_from = 5;
+    string due_date_until = 6;
+    bool due_date_is_completed = 7;
+    repeated AddMemberInput members = 8;
+}
+
+message CardList {
+    repeated Card cards = 1;
+}
+
+message CardPage {
+    repeated Card items = 1;
+    int32 total = 2;
+}
+
+message Card {
+    string id = 1;
+    string list_id = 2;
+    string public_id = 3;
+    string title = 4;
+    string description = 5;
+    google.protobuf.Timestamp due_date_from = 6;
+    google.protobuf.Timestamp due_date_until = 7;
+    google.protobuf.Timestamp due_date_completed_at = 8;
+    repeated CardMember members = 9;
+    repeated CardAttachment attachments = 10;
+    repeated CardLabel labels = 11;
+    google.protobuf.Timestamp created_at = 12;
+    google.protobuf.Timestamp updated_at = 13;
+    google.protobuf.Timestamp deleted_at = 14;
+}
+
+message CardMember {
+    string id = 1;
+    string card_id = 2;
+    string user_id = 3;
+    google.protobuf.Timestamp created_at = 4;
+}
+
+message CardAttachment {
+    string id = 1;
+    string card_id = 2;
+    string link_name = 3;
+    string file_type = 4;
+    string file_url = 5;
+    google.protobuf.Timestamp created_at = 6;
+    google.protobuf.Timestamp updated_at = 7;
+}
+
+message CardLabel {
+    string id = 1;
+    string card_id = 2;
+    string label_id = 3;
+    google.protobuf.Timestamp created_at = 4; 
 }

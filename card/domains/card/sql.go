@@ -47,6 +47,11 @@ const (
 			deleted_at = ?
 		WHERE entity_id = ?
 	`
+	selectCardIDQuery = `
+		SELECT
+			c.entity_id
+		FROM card c
+	`
 	selectCardQuery = `
 		SELECT
 			c.entity_id,
@@ -204,6 +209,31 @@ func (repo *SQLRepository) ResolveByID(ctx context.Context, id string) (*Card, e
 	result.Attachments = attachments
 	result.Labels = labels
 	return &result, nil
+}
+
+func (repo *SQLRepository) ResolveIDsByFilter(ctx context.Context, filter Filter) ([]string, error) {
+	if filter.IsEmpty() {
+		return make([]string, 0), nil
+	}
+	whereClauseQuery, joinQuery, values := repo.buildQueryWithFilter(filter)
+	query, args, err := repo.db.In(selectCardIDQuery+" "+joinQuery+" "+whereClauseQuery, values)
+	if err != nil {
+		return make([]string, 0), errors.WithStack(err)
+	}
+	query = repo.db.Rebind(query)
+	rows, err := repo.db.Query(query, args...)
+	if err != nil {
+		return make([]string, 0), errors.WithStack(err)
+	}
+	var cardIDs []string
+	for rows.Next() {
+		var id string
+		if err := rows.Scan(&id); err != nil {
+			return make([]string, 0), err
+		}
+		cardIDs = append(cardIDs, id)
+	}
+	return cardIDs, nil
 }
 
 func (repo *SQLRepository) ResolveAllByFilter(ctx context.Context, filter Filter) ([]Card, error) {

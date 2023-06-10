@@ -59,6 +59,20 @@ func (svc *Service) Update(ctx context.Context, cardID string, input CardInput) 
 	return entity, nil
 }
 
+func (svc *Service) MoveList(ctx context.Context, cardID, listID string) (*Card, error) {
+	entity, err := svc.repo.ResolveByID(ctx, cardID)
+	if err != nil {
+		return nil, err
+	}
+	if err := entity.MoveList(listID); err != nil {
+		return nil, err
+	}
+	if err = svc.repo.Store(ctx, entity); err != nil {
+		return nil, err
+	}
+	return svc.ResolveByID(ctx, cardID)
+}
+
 func (svc *Service) UpdateMembers(ctx context.Context, cardID string, members []MemberInput) (*Card, error) {
 	entity, err := svc.repo.ResolveByID(ctx, cardID)
 	if err != nil {
@@ -126,7 +140,7 @@ func (svc *Service) generateCode(ctx context.Context, retried int) (string, erro
 	if err != nil {
 		return "", errors.Wrap(err, "count rows by public_id")
 	}
-	if total > 0 {
+	if total > 0 && retried <= 3 {
 		return svc.generateCode(ctx, retried+1)
 	}
 	return code, nil

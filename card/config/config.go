@@ -14,8 +14,10 @@ type Config struct {
 	MySQLUser     string `envconfig:"mysql_user" default:"root"`
 	MySQLPassword string `envconfig:"mysql_password" default:"root-is-not-used"`
 
-	MySQLMaxOpenConns int `envconfig:"mysql_max_open_conn" default:"100"`
-	MySQLMaxIdleConns int `envconfig:"mysql_max_idle_conn" default:"10"`
+	MySQLMaxOpenConns int    `envconfig:"mysql_max_open_conn" default:"100"`
+	MySQLMaxIdleConns int    `envconfig:"mysql_max_idle_conn" default:"10"`
+	RedisHost         string `envconfig:"redis_host" default:"localhost:6379"`
+	RedisPassword     string `envconfig:"redis_password" default:"eYVX7EwVmmxKPCDmwMtyKVge8oLd2t81"`
 }
 
 func NewConfig() Config {

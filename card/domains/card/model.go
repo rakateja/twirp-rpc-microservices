@@ -35,6 +35,12 @@ type Card struct {
 	DeletedAt          *time.Time   `json:"deleted_at" db:"deleted_at"`
 }
 
+func (c *Card) MoveList(listID string) error {
+	c.ListID = listID
+	c.UpdatedAt = time.Now()
+	return nil
+}
+
 func (c *Card) AddAttachment(fileURL, fileType, linkName string) error {
 	id, err := uuid.NewUUID()
 	if err != nil {
