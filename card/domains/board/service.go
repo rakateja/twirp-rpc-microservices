@@ -169,6 +169,10 @@ func (svc *Service) ResolvePage(ctx context.Context, pageNum int, pageSize int) 
 	}, nil
 }
 
+func (svc *Service) ResolveListByID(ctx context.Context, id string) (BoardList, error) {
+	return svc.repo.ResolveListByID(ctx, id)
+}
+
 func (svc *Service) generatePublicID(ctx context.Context, retried int) (res string, err error) {
 	return
 }

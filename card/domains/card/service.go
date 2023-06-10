@@ -64,6 +64,15 @@ func (svc *Service) MoveList(ctx context.Context, cardID, listID string) (*Card,
 	if err != nil {
 		return nil, err
 	}
+	list, err := svc.boardService.ResolveListByID(ctx, listID)
+	if err != nil {
+		return nil, err
+	}
+	if entity.BoardID != list.BoardID {
+		return nil, apierror.WithDesc(
+			ErrorCodeInvalidInput,
+			"the board list doesn't associate with the board")
+	}
 	if err := entity.MoveList(listID); err != nil {
 		return nil, err
 	}

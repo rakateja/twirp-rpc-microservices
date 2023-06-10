@@ -10,4 +10,5 @@ type Repository interface {
 	ResolveAllByFilter(ctx context.Context, filter Filter) ([]Board, error)
 	ResolveAll(ctx context.Context, offset, limit int) ([]Board, error)
 	ResolveTotal(ctx context.Context) (int, error)
+	ResolveListByID(ctx context.Context, listID string) (BoardList, error)
 }

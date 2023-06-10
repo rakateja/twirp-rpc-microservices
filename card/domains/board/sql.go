@@ -294,6 +294,18 @@ func (repo *SQLRepository) ResolveTotal(ctx context.Context) (int, error) {
 	return total, err
 }
 
+func (repo *SQLRepository) ResolveListByID(ctx context.Context, id string) (BoardList, error) {
+	var list BoardList
+	err := repo.db.Get(&list, selectListQuery+" WHERE entity_id = ?", id)
+	if err != nil {
+		if err == sql.ErrNoRows {
+			return list, apierror.WithDesc(ErrorCodeEntityNotFound, "board list not found")
+		}
+		return list, errors.WithStack(err)
+	}
+	return list, nil
+}
+
 func (repo *SQLRepository) existByID(id string) (bool, error) {
 	var total int
 	err := repo.db.Get(&total, countBoardQuery+" WHERE entity_id = ?", id)
