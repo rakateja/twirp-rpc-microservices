@@ -1,0 +1,11 @@
+version: 2
+
+updates:
+  - package-ecosystem: "gomod"
+    directory: "/card"
+    schedule:
+      interval: "daily"
+    target-branch: "master"
+    labels:
+      - "go"
+      - "card-api"
