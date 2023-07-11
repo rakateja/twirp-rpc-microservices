@@ -2,7 +2,7 @@ version: 2
 
 updates:
   - package-ecosystem: "gomod"
-    directory: "/card"
+    directory: "/chi-hello-world"
     schedule:
       interval: "daily"
     target-branch: "master"
