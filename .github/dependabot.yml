@@ -1,7 +1,7 @@
 version: 2
 
 updates:
-  - package-ecosystem: "gomod"
+  - package-ecosystem: "go"
     directory: "/chi-hello-world"
     schedule:
       interval: "daily"
@@ -9,3 +9,9 @@ updates:
     labels:
       - "go"
       - "card-api"
+  - package-ecosystem: npm
+    directory: "/javascript"
+    schedule:
+      interval: "daily"
+    labels:
+      - "javascript"
