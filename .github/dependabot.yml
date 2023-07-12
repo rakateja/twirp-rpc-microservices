@@ -6,6 +6,8 @@ updates:
     schedule:
       interval: "daily"
     target-branch: "master"
+    reviewers:
+      - "rakateja"
     labels:
       - "go"
       - "card-api"
@@ -13,5 +15,7 @@ updates:
     directory: "/javascript"
     schedule:
       interval: "daily"
+    reviewers:
+      - "rakateja"
     labels:
       - "javascript"
