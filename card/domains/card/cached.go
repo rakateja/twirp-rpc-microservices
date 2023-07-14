@@ -95,6 +95,9 @@ func (repo *cachedRepository) ResolveAllByFilter(ctx context.Context, filter Fil
 	}
 	cardMap := make(map[string]Card, 0)
 	for _, bt := range bts {
+		if bt == nil {
+			continue
+		}
 		var card Card
 		if err := json.Unmarshal([]byte(bt.(string)), &card); err != nil {
 			return res, err

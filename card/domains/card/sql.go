@@ -264,7 +264,6 @@ func (repo *SQLRepository) ResolveAllByFilter(ctx context.Context, filter Filter
 		return nil, nil
 	}
 	whereClauseQuery, joinQuery, values := repo.buildQueryWithFilter(filter)
-	log.Printf("query: %s", joinQuery+whereClauseQuery)
 	query, args, err := repo.db.In(selectCardQuery+" "+joinQuery+" "+whereClauseQuery, values)
 	if err != nil {
 		err = errors.WithStack(err)
@@ -310,7 +309,6 @@ func (repo *SQLRepository) ResolveAllByFilter(ctx context.Context, filter Filter
 
 func (repo *SQLRepository) CountByFilter(ctx context.Context, filter Filter) (int, error) {
 	whereClauseQuery, joinQuery, values := repo.buildQueryWithFilter(filter)
-	log.Printf("CountByFilter() %s %s %v", joinQuery, whereClauseQuery, values)
 	query, args, err := repo.db.In(countCardQuery+" "+joinQuery+" "+whereClauseQuery, values)
 	if err != nil {
 		err = errors.WithStack(err)

@@ -50,6 +50,7 @@ func (svc *Service) Update(ctx context.Context, cardID string, input CardInput) 
 	if err != nil {
 		return nil, errors.Wrap(err, "resolve card by id")
 	}
+
 	if entity.ListID != input.ListID {
 	}
 	err = entity.Update(input)
