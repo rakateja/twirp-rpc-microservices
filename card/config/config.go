@@ -16,7 +16,7 @@ type Config struct {
 
 	MySQLMaxOpenConns int    `envconfig:"mysql_max_open_conn" default:"100"`
 	MySQLMaxIdleConns int    `envconfig:"mysql_max_idle_conn" default:"10"`
-	RedisHost         string `envconfig:"redis_host" default:"localhost:6379"`
+	RedisHost         string `envconfig:"redis_host" default:"localhost:6380"`
 	RedisPassword     string `envconfig:"redis_password" default:"eYVX7EwVmmxKPCDmwMtyKVge8oLd2t81"`
 }
 

@@ -162,3 +162,15 @@ func (svc *Service) ResolveByID(ctx context.Context, id string) (*Card, error) {
 func (svc *Service) ResolveAllByFilter(ctx context.Context, filter Filter) ([]Card, error) {
 	return svc.repo.ResolveAllByFilter(ctx, filter)
 }
+
+func (svc *Service) Search(ctx context.Context, pageNum, limit int32, filter Filter) (res CardPage, err error) {
+	total, err := svc.repo.CountByFilter(ctx, filter)
+	if err != nil {
+		return
+	}
+	items, err := svc.repo.ResolveAllByFilter(ctx, filter)
+	if err != nil {
+		return
+	}
+	return CardPage{Items: items, Total: int32(total)}, nil
+}

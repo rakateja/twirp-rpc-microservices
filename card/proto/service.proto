@@ -19,7 +19,7 @@ service CardService {
     rpc Update(CardUpdateInput) returns (Card);
     rpc MoveList(CardMoveListInput) returns (Card);
     rpc GetByID(GetByIDInput) returns (Card);
-    rpc GetPage(GetPageInput) returns (CardPage);
+    rpc Search(GetPageInput) returns (CardPage);
     rpc GetAll(CardFilter) returns (CardList);
 }
 
@@ -56,6 +56,7 @@ message AddListInput {
 message GetPageInput {
     int32 page = 1;
     int32 limit = 2;
+    CardFilter filter = 3;
 }
 
 message BoardPage {
@@ -103,6 +104,7 @@ message BoardLabel {
 
 message CardFilter {
     repeated string ids = 1;
+    repeated string board_ids = 2;
 }
 
 message CardMoveListInput {

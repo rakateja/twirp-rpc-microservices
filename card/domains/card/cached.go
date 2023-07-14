@@ -73,14 +73,21 @@ func (repo *cachedRepository) ResolveByID(ctx context.Context, id string) (*Card
 	return res, nil
 }
 
+func (repo *cachedRepository) ResolveAllIDsByFilter(ctx context.Context, filter Filter) ([]string, error) {
+	return repo.sqlRepo.ResolveAllIDsByFilter(ctx, filter)
+}
+
 func (repo *cachedRepository) ResolveAllByFilter(ctx context.Context, filter Filter) (res []Card, err error) {
-	ids, err := repo.sqlRepo.ResolveIDsByFilter(ctx, filter)
+	ids, err := repo.sqlRepo.ResolveAllIDsByFilter(ctx, filter)
 	if err != nil {
 		return
 	}
 	var keys []string
 	for _, id := range ids {
 		keys = append(keys, fmt.Sprintf(cachedKey, id))
+	}
+	if len(keys) == 0 {
+		return
 	}
 	bts, err := repo.client.MGet(ctx, keys...).Result()
 	if err != nil {
@@ -111,8 +118,8 @@ func (repo *cachedRepository) ResolveAllByFilter(ctx context.Context, filter Fil
 	return cards, nil
 }
 
-func (repo *cachedRepository) ResolveIDsByFilter(ctx context.Context, filter Filter) ([]string, error) {
-	return repo.sqlRepo.ResolveIDsByFilter(ctx, filter)
+func (repo *cachedRepository) ResolveIDsByFilter(ctx context.Context, filter Filter, limit int) ([]string, error) {
+	return repo.sqlRepo.ResolveIDsByFilter(ctx, filter, limit)
 }
 
 func (repo *cachedRepository) CountByFilter(ctx context.Context, filter Filter) (int, error) {

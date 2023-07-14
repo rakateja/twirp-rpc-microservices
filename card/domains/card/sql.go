@@ -3,6 +3,7 @@ package card
 import (
 	"context"
 	"database/sql"
+	"fmt"
 	"log"
 	"strings"
 
@@ -211,12 +212,34 @@ func (repo *SQLRepository) ResolveByID(ctx context.Context, id string) (*Card, e
 	return &result, nil
 }
 
-func (repo *SQLRepository) ResolveIDsByFilter(ctx context.Context, filter Filter) ([]string, error) {
-	if filter.IsEmpty() {
-		return make([]string, 0), nil
-	}
+func (repo *SQLRepository) ResolveAllIDsByFilter(ctx context.Context, filter Filter) ([]string, error) {
 	whereClauseQuery, joinQuery, values := repo.buildQueryWithFilter(filter)
 	query, args, err := repo.db.In(selectCardIDQuery+" "+joinQuery+" "+whereClauseQuery, values)
+	if err != nil {
+		return make([]string, 0), errors.WithStack(err)
+	}
+	query = repo.db.Rebind(query)
+	rows, err := repo.db.Query(query, args...)
+	if err != nil {
+		return make([]string, 0), errors.WithStack(err)
+	}
+	var cardIDs []string
+	for rows.Next() {
+		var id string
+		if err := rows.Scan(&id); err != nil {
+			return make([]string, 0), err
+		}
+		cardIDs = append(cardIDs, id)
+	}
+	return cardIDs, nil
+}
+
+func (repo *SQLRepository) ResolveIDsByFilter(ctx context.Context, filter Filter, limit int) ([]string, error) {
+	whereClauseQuery, joinQuery, values := repo.buildQueryWithFilter(filter)
+	log.Printf("ResolveIDsByFilter() %s %s %v", joinQuery, whereClauseQuery, values)
+	values["limit"] = limit
+	fmt.Printf("ResolveIDsByFilter() %v\n", values)
+	query, args, err := repo.db.In(selectCardIDQuery+" "+joinQuery+" "+whereClauseQuery+" LIMIT :limit", values)
 	if err != nil {
 		return make([]string, 0), errors.WithStack(err)
 	}
@@ -287,6 +310,7 @@ func (repo *SQLRepository) ResolveAllByFilter(ctx context.Context, filter Filter
 
 func (repo *SQLRepository) CountByFilter(ctx context.Context, filter Filter) (int, error) {
 	whereClauseQuery, joinQuery, values := repo.buildQueryWithFilter(filter)
+	log.Printf("CountByFilter() %s %s %v", joinQuery, whereClauseQuery, values)
 	query, args, err := repo.db.In(countCardQuery+" "+joinQuery+" "+whereClauseQuery, values)
 	if err != nil {
 		err = errors.WithStack(err)
@@ -324,6 +348,9 @@ func (repo *SQLRepository) buildQueryWithFilter(filter Filter) (whereClauseQuery
 		joinQuery = "INNER JOIN card_member m ON m.card_id = c.entity_id"
 		params = append(params, "m.user_id IN (:user_ids)")
 		values["user_ids"] = filter.UserIDs
+	}
+	if len(params) == 0 {
+		return "", "", make(map[string]interface{}, 0)
 	}
 	whereClauseQuery = "WHERE " + strings.Join(params, " AND ")
 	return whereClauseQuery, joinQuery, values

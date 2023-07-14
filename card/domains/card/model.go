@@ -292,3 +292,8 @@ type AttachmentInput struct {
 	LinkName   string `json:"link_name" validate:"required"`
 	FileBase64 string `json:"file_base64" validate:"base64"`
 }
+
+type CardPage struct {
+	Items []Card
+	Total int32
+}

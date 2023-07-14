@@ -250,32 +250,6 @@
         }
       }
     },
-    "/twirp/twirp.example.card.CardService/GetPage": {
-      "post": {
-        "tags": [
-          "CardService"
-        ],
-        "operationId": "GetPage",
-        "parameters": [
-          {
-            "name": "body",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/twirp.example.card_GetPageInput"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/twirp.example.card_CardPage"
-            }
-          }
-        }
-      }
-    },
     "/twirp/twirp.example.card.CardService/MoveList": {
       "post": {
         "tags": [
@@ -297,6 +271,32 @@
             "description": "A successful response.",
             "schema": {
               "$ref": "#/definitions/twirp.example.card_Card"
+            }
+          }
+        }
+      }
+    },
+    "/twirp/twirp.example.card.CardService/Search": {
+      "post": {
+        "tags": [
+          "CardService"
+        ],
+        "operationId": "Search",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/twirp.example.card_GetPageInput"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/twirp.example.card_CardPage"
             }
           }
         }
@@ -631,9 +631,15 @@
       }
     },
     "twirp.example.card_CardFilter": {
-      "description": "Fields: ids",
+      "description": "Fields: ids, board_ids",
       "type": "object",
       "properties": {
+        "board_ids": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
         "ids": {
           "type": "array",
           "items": {
@@ -775,9 +781,12 @@
       }
     },
     "twirp.example.card_GetPageInput": {
-      "description": "Fields: page, limit",
+      "description": "Fields: page, limit, filter",
       "type": "object",
       "properties": {
+        "filter": {
+          "$ref": "#/definitions/twirp.example.card_CardFilter"
+        },
         "limit": {
           "type": "integer",
           "format": "int32"

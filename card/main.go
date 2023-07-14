@@ -22,6 +22,20 @@ func main() {
 		Password: conf.RedisPassword,
 		DB:       0,
 	})
+	/*rdb1 := redis.NewClusterClient(&redis.ClusterOptions{
+		Addrs:       []string{":6373", ":6374", ":6375"},
+		PoolTimeout: time.Second * 30,
+
+		// To route commands by latency or randomly, enable one of the following.
+		//RouteByLatency: true,
+		//RouteRandomly: true,
+	})
+	err = rdb1.ForEachShard(context.Background(), func(ctx context.Context, shard *redis.Client) error {
+		return shard.Ping(ctx).Err()
+	})
+	if err != nil {
+		panic(err)
+	}*/
 	labelSQLRepo := board.NewLabelSQLRepository(db)
 	boardSQLRepo := board.NewSQLRepository(db)
 	boardService := board.NewService(boardSQLRepo, labelSQLRepo)
@@ -30,7 +44,7 @@ func main() {
 	cardService := card.NewService(cardCachedRepo, boardService)
 	boardTwirpServer := servers.NewBoardServer(boardService)
 	boardTwirpHandler := pb.NewBoardServiceServer(boardTwirpServer)
-	cardTwirpServer := servers.NewCardServer(cardService)
+	cardTwirpServer := card.NewRPCServer(cardService)
 	cardTwirpHandler := pb.NewCardServiceServer(cardTwirpServer)
 	mux := http.NewServeMux()
 	mux.Handle(boardTwirpHandler.PathPrefix(), boardTwirpHandler)
